@@ -1,0 +1,77 @@
+---
+layout: post
+title: Blog#2 - Cambio de host.
+---
+
+Buenas,
+
+Debido a una serie de gustos personales he decido migrar de Wordpress y ponerme una pagina
+yo mismo. Esto con llevo a pensar que Framework utilizar y en que host lo iba a establecer.
+
+Mis intereses:
+1. Escribir todo lo que yo hago.
+2. Una forma organizada de encontrar todos mis proyectos.
+
+Teniendo en cuenta esos dos factores decidi utilizar Jekyll. El host que estare utilizando por ahora
+es Heroku.
+
+Asumire que se tiene instalado Ruby , Jekyll, Git y Heroku.
+Como primer paso montamos la aplicacion y entramos al directorio.
+
+    $ jekyll new <nombredelaaplicacion>
+    $ cd <nombredelaaplicacion>
+    $ git init
+
+En Gemfile agregaremos las dependencias necesarias que vamos a necesitar. En mi caso utilizare vi para
+abrir el archivo.
+
+    $ vi Gemfile
+
+Una vez adentro del archivo escribimos:
+
+    gem "bundler"
+    gem "rack-jekyll"
+
+Bien, para que sirve rack-jekyll? Bueno rack es una interfaz para desarrollo web de aplicaciones en Ruby.
+Lo que hace rack-jekyll es transformar tu aplicacion Jekyll en una aplicacion Rack.
+El paso siguiente es configurarlo.
+Creamos un archivo config.ru:
+
+    $ vi config.ru
+
+y escribimos:
+
+    include "rack/jekyll"
+    run Rack::Jekyll.new
+
+Una vez configurado construimos el paquete para poder ser desplegado en Heroku
+
+    $ heroku create <nombredelaaplicacion> --buildpack https://github.com/heroku/heroku-buildpack-ruby
+
+Antes de realizar un commit a git es necesario excluir del config.yml a config.ru, vendor.
+En config.yml es donde nosotros podemos configurar nuestra aplicacion. En este caso solo excluiremos
+los archivos creados para Heroku.
+
+    $ vi config.yml
+
+    exclude
+      - config.ru
+      - vendor
+
+Por ultimo hacemos un commit de nuestro repositorio a Heroku.
+
+    $ git add .
+    $ git commit -m "Primer commit"
+    $ git push heroku master
+
+Una vez terminado con todo el proceso, podemos abrir nuestra aplicacion.
+
+    $ heroku open
+
+En caso de que tengas algun problema ahora o en el futuro, una manera de poder hacer debug es:
+
+    $ heroku logs --tail
+
+Una vez detectado el error Ctrl+c.
+
+Espero que les sirva y desde ya Saludos.-
