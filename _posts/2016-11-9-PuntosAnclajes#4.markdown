@@ -32,14 +32,14 @@ al objeto que crearemos en esta entrada.
 <h2>Motor - GameObject:</h2>
 
 Crearemos un GameObject vacio.
-Este GameObject solo contendra dos componentes. Y sera hijo de el
-GameObject Nave. Por defecto este GameObject estará desactivado.
+Este `GameObject` solo contendra dos componentes. Y sera hijo de el
+`GameObject` Nave. Por defecto este `GameObject` estará desactivado.
 
 1. Transform
 2. Comportamiento.cs (Script)
 
-La Transform no es importante, por lo que solo nos ocuparemos del
-Script. Este Script se comportara de manera analoga a Movimiento.cs
+La `Transform` no es importante, por lo que solo nos ocuparemos del
+`Script`. Este `Script` se comportara de manera analoga a Movimiento.cs
 
 {% highlight c# %}
 private float velX;
@@ -59,12 +59,12 @@ void Start () {
 Las dos primeras variable se usaran para detectar si hay movimiento
 de parte del jugador por medio del teclado. (Ya visto en Movimiento)
 
-Luego desde la UI de Unity estableceremos la Transform del GameObject proa en la variable
+Luego desde la UI de Unity estableceremos la `Transform` del `GameObject` proa en la variable
 proa.
 
-Y por ultimo buscaremos el GameObject Nave que en este caso es el padre. Estas
+Y por ultimo buscaremos el `GameObject` Nave que en este caso es el padre. Estas
 dos variables nos permetiran crear el vector director.
-Segudo paso será crear un método para que haga el calculo del vector director.
+Segundo paso será crear un método para que haga el calculo del vector director.
 
 {% highlight c# %}
 private Vector3 calculoDireccion() {
@@ -102,10 +102,10 @@ void FixedUpdate () {
 }
 {% endhighlight %}
 
-Parte1: Chequeamos si el Jugador apretó alguna flecha.<br>
-Parte2: En caso que el valor absoluto de vely sea mayor a cero, la nave se moverá según el vector director.<br>
-Parte3: Si el valor absoluto de velx es mayor a cero, la nave girará.<br>
-Parte4: Definiremos la nueva velocidad crucero de la nave.<br>
+1. Chequeamos si el Jugador apretó alguna flecha.<br>
+2. En caso que el valor absoluto de vely sea mayor a cero, la nave se moverá según el vector director.<br>
+3. Si el valor absoluto de velx es mayor a cero, la nave girará.<br>
+4. Definiremos la nueva velocidad crucero de la nave.<br>
 
 Con esta nueva entrada ya estamos piloteando la nave, solo nos queda habilitar los mecanismo de disparos
 y estaremos listo para marchar al combate.

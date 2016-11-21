@@ -2,7 +2,7 @@ title: Blog de Luciano
 email: lucianoitaliani@gmail.com
 description: > # this means to ignore newlines until "baseurl:"
   Mi nombre es Luciano Italiani y este es mi blog donde escribo
-  todos mis proyectos relacionados con programacion y electronica.  
+  todos mis proyectos relacionados con programacion y electronica.
 
 baseurl: "" # the subpath of your site, e.g. /blog
 url: "" # the base hostname & protocol for your site, e.g. http://example.com
@@ -14,6 +14,8 @@ markdown: kramdown
 theme: minima
 gems:
   - jekyll-feed
+include:
+  - image
 exclude:
   - config.ru
   - vendor
