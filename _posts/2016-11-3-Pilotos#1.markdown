@@ -1,0 +1,159 @@
+---
+layout: post
+title: "Pilotos #1"
+---
+
+Buenas,
+
+Hoy hablaremos de como los pilotos interactuan con diferentes objetos y se mueve por la Nave.
+Les recuerdo que esto es usando el motor Unity3D y escrito en C#.
+
+
+<h3>GameObject:</h3>
+
+Este objeto es hijo de la nave que lo contiene, y tiene 4 componentes mas:
+
+<em>Movimiento.cs(Script)</em><br>
+<em>Piloto.cs(Script)</em><br>
+<em>CircleCollider(Dado del tipo de perspectiva que uso para el juego)</em><br>
+<em>Rigidbody2D(Esta componente se crea y se destruye mediante el Script Piloto.cs)<em><br>
+
+<h3>CircleCollider:</h3>
+
+Esta componente solo esta para que el jugador respete los limites de la nave.
+
+<h3>Layer:</h3>
+
+Los pilotos estan contenidos en un Layer especial, esto nos permitira mediante otro Script
+ActivarZona.cs, detectarlos y asi darles un trabajo.
+El layer es piloto, pero es totalmente arbitrario.
+
+<h3>Script: Piloto.cs</h3>
+
+Los pilotos estan regidos por la clase Piloto la cual cuenta con 3 atributos:<br>
+<br>
+<em>elegidoPorJugador(boolean)</em><br>
+<em>estadoTrabajo(GameObject)</em><br>
+<em>quetrabajo (String)</em><br>
+
+El primero es muy intuitivo, nos da informacion sobre si el jugador tiene seleccionado al piloto.
+El segundo nos dice si esta trabajando, esto debe entenderse como si el pilot
+esta operando en alguna
+consola en particular. (Con sola de movimiento, de disparo)
+Hace referencia al nombre del Script que ahce funcionar la consola usada.
+
+Cada atributo tiene su Set y Get correspondiente y son publicos:
+
+{% highlight c# %}
+    public void setElegidoPorJugador(bool e) {
+		if(e && quetrabajo == null)
+			crearRigidbody2D();
+		else
+			destruirRigidbody2D();
+		elegidoPorJugador = e;
+	}
+
+	public bool getElegidoPorJugador(bool e) {
+		return elegidoPorJugador;
+	}
+
+	public void setEstadoTrabajo(GameObject e) {		
+		estadotrabajo = e;
+	}
+
+	public GameObject getEstadoTrabajo() {
+		return estadotrabajo;
+	}
+
+	public void setQueTrabajo(string s) {
+		if(s != null) {
+			setEstadoTrabajo(GameObject.Find(s));
+			destruirRigidbody2D();
+		}
+		else {
+			setEstadoTrabajo(null);
+			crearRigidbody2D();
+		}
+		quetrabajo = s;
+	}
+
+	public string getQueTrabajo() {
+		return quetrabajo;
+	}
+{% endhighlight %}
+
+Cada uno de los set y get son muy sencillos de entender, con excepcion del setQueTrabajo y setElegidoPorJugador.
+En setQueTrabajo hay dos posibles valores entrante, el nombre de un Script (implica que trabaja)	o
+null (implica que no hace nada), en el caso que este trabajando, el jugador no va a tener intecion de moverlo
+por lo tanto le quitamos la Componente de Rigdbody2D cuando el piloto vuelve al estado sinTrabajo voy a necesitar otra
+ves esta componente.
+
+{% highlight c# %}
+	private void crearRigidbody2D() {		
+		if(GetComponent<Rigidbody2D>() == null) {
+			Rigidbody2D r = gameObject.AddComponent<Rigidbody2D>();
+			r.gravityScale = 0f;
+			r.freezeRotation = true;
+		}		
+	}
+
+	private void destruirRigidbody2D() {		
+		Destroy(GetComponent<Rigidbody2D>());
+	}
+{% endhighlight %}
+
+En la creacion del Rigidbody2D, estoy interesado en que la gravedad sea 0, para que no caiga y este
+libre de rotacion en caso de colision.
+
+<h3>Script:Movimiento.cs</h3>
+
+Este Script se habilita solo cuando el jugador selecciona al piloto. El Script encargado de esto
+se llama Seleccion.cs (Todavia no visto).
+Esta clase es mas general y es usado por otros GameObject.
+Consta de 4 atributos:
+
+<em>Velx(float)</em><br>
+<em>Vely(float)</em><br>
+<em>vel(float)</em><br>
+<em>nave(Nave)</em><br>
+
+Tres atributos son punto flotantes y el ultimo utiliza la clase Nave(Todavia no vista)
+En el constructor buscamos el objeto nave y lo ligamos a la variable.
+
+{% highlight c# %}
+	nave = GameObject.Find("<Nombre del objeto>").GetComponent<Nave>();
+{% endhighlight %}
+
+El unico metodo que tiene este Script es FixedUpdate(IMPORTANTE: No usar Update, en proximas entrada explicare porque
+ahora no quiero extender mas la entrada).
+
+{% highlight c# %}
+	void FixedUpdate () {
+
+		velX = Input.GetAxis("Horizontal");
+		velY = Input.GetAxis("Vertical");
+
+		if(velX > 0 || velX < 0)
+			GetComponent<Rigidbody2D>().velocity = new Vector2(velX*vel, 0);		
+		else
+			GetComponent<Rigidbody2D>().velocity = new Vector2(nave.getVelCruceroX(),nave.getVelCruceroY());
+
+
+		if(velY > 0 || velY < 0)
+			GetComponent<Rigidbody2D>().velocity = new Vector2(GetComponent<Rigidbody2D>().velocity.x, velY*vel);		
+		else
+			GetComponent<Rigidbody2D>().velocity = new Vector2(GetComponent<Rigidbody2D>().velocity.x, nave.getVelCruceroY());
+
+	}
+{% endhighlight %}
+
+Las dos primeras lineas (Input.GetAxis(..)) detectan si el jugador apreta alguna flecha en el teclado o (w,s,d,a)
+Segun cuanto tiempo mantenga la tecla las variables tomaran un valor entre 0 y 1.
+En el primer if-else, verificamos si hay una respuesta del usuario en las coordenadas x y si lo hay lo trasmitimos
+al Rigidbody2D en forma de vector.
+Si no hay accion del jugador, la velocidad que tomara el piloto sera la de la Nave. ¡Por que? Porque los pilotos
+van en la nave y se mueven con ella.
+El segundo if-else es igual pero con la componente y.
+
+En la proxima entrada explicare el funcionamiento de la Nave.<br><br>
+Saludos.-

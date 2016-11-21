@@ -1,0 +1,155 @@
+---
+layout: post
+title: Nave#1
+---
+
+
+Buenas,
+
+Hoy nos enfocaremos en el GameObject de la nave del jugador.
+Este desarrollo es creado bajo Unity 5.4.1 en c#.
+
+<h3>GameObject:</h3>
+
+Este objeto va constar por 4 componentes por ahora:<br>
+<em>Transform</em><br>
+<em>Rigidbody2D</em><br>
+<em>Movimiento.cs(Script esta componente estará deshabilitada al inicio)</em><br>
+<em>Nave.cs(Script)</em><br>
+
+Este objeto tendrá hijos objetos:<br>
+<em>proa</em><br>
+<em>cubierta (tendra hijos)</em><br>
+<em>anclajes (tendra hijos)</em><br>
+
+`proa:` La proa es la parte delantera de la nave y nos servira para trazar un vector y hacer que la nave gire
+de manera correcta. No queremos desplazamiento horizontales.
+
+`cubierta:` Es la zona donde los pilotos habitaran y podremos trazar los limites.
+
+`anclajes:` Son puntos de interes donde con cada piloto podremos hacer una actividad.
+
+<h3>Layer:</h3>
+
+Crearemos un layer especial
+
+<h3>Rigidbody2D:</h3>
+
+Dado nuestra perspectiva pondremos la gravedad a cero. Habilitaremos isKinematic no nos interesa que la nave
+este sometida a fuerza o colision, en caso que lo este nosotros lo definiremos en un Script. Y por ultimo
+habilitaremos Freeze rotation Z.
+
+{% highlight c# %}
+    Gravity Scale = 0 (Desde la UI de Unity)
+    IsKinematic = true;
+    Constraints / Freeze Rotation / Z = true;
+{% endhighlight %}
+
+Esta elecciones son arbitrarias y estan basada en la filosofia de mi Juego.
+
+<h3>Movimiento.cs(Script):</h3>
+
+En esta entrada explicamos el uso de este Script. El uso es el mismo.
+
+<h3>Nave.cs(Script):</h3>
+
+En este Script guardaremos informacion sobre la capacidad de la Nave que tengamos en la mision
+Por lo tanto los valores van a variar, pero los atributos son:
+
+{% highlight c# %}
+	private float velCruceroX;
+	private float velCruceroY;
+
+    public float energia;
+
+	public float escudo;
+
+	public float armadura;
+{% endhighlight %}    
+
+En esta entrada solo explicare lo basico, esto significa nada de UI o ecuaciones acargo de las resistencias.
+Por lo tanto nos conformaremos con las variables de punto flotante.
+
+En POO es de muy mala practica declarar las variables publicas. En este caso lo ahcemos por un sencilla
+razon. Y esto se llama reusabilidad. Nos permitira usar este mismo Script varias veces en distintas escenas solo
+cambiando unos valores en en la UI de Unity.
+Si esto te horroriza(JAJA!) podes crear Scripts que hereden de esta clase los metodos y en cada script definis
+los atributos correspondientes.(Más elegante pero hay que escribir un poco más)
+
+Seguimos analizando el Script.
+
+{% highlight c# %}
+    void Start () {
+
+		velCruceroX = 0f;
+		velCruceroY = 0f;
+	}
+
+	public void recibioImpacto() {
+		if(escudo>0f)
+			perderEscudo();
+		else
+			perderArmadura();
+	}
+
+    // Vida.
+
+	private void perderEscudo() {
+		escudo -= 10f;
+	}
+
+	private void perderArmadura() {
+		armadura -= 10f;
+		if(armadura<=0)
+			Perdiste();
+	}
+
+    // GameOver.
+
+	private void Perdiste() {
+		SceneManager.LoadScene(2);
+	}
+
+    // Velocidad Crucero.
+
+	public void setVelCruceroX(float velX) {
+		velCruceroX = velX;
+	}
+
+	public void setVelCruceroY(float velY) {
+		velCruceroY = velY;
+	}
+
+	public float getVelCruceroX() {
+		return velCruceroX;
+	}
+
+	public float getVelCruceroY() {
+		return velCruceroY;
+	}
+{% endhighlight %}
+
+La velocidad crucero se utilizara principalmente para poder establecerla a nuestro pilotos cuando este
+la componente Rigidbody2D en ellos y se desplace a la par con la Nave.
+
+El evento de perder vida esta regido por el recibioImpacto() dependiendo el estado del escudo o la armadura.
+Debo aclarar que el valor 10f es arbitrario y mas como metodo de testing. El valor va  variar según el
+tipo de disparo recibido.
+
+Otro punto para aclarar es que la Nave solo pierde puntos de vida en impactos de tiros, no en colisiones.
+Esto tambien es arbitrario.
+
+Ultimo punto es el evento de derrota Perdiste(). Para poder usar SceneManager es necesario importar al inicio
+del archivo.
+
+{% highlight c# %}
+	using UnityEngine.SceneManagement
+{% endhighlight %}
+
+Este metedo simplemente carga una nueva escena cuando tu nave pierde toda su armadura.
+El numero 2 indica el numero de escena a cargar, pero por el momento no es necesario esta parte.
+
+Bien, esto es un primer vistazo sencillo al GameObject en las proximas entradas ahodaremos en la cubierta,
+en los puntos de anclajes y seguiremos profundizando en el Script: Nave.
+
+Desde ya Saludos.-

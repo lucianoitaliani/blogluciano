@@ -1,0 +1,24 @@
+---
+layout: post
+title: Blog#1
+---
+
+Buenas,
+
+Hace 14 dias empezamos este Blog, y estamos contentos de como se estan desarrollando las cosas.
+
+Nuestro primero objetivo fue: Hacer un juego como proyecto. En estos primero 14 dias lo importante
+era establecer las bases del juego el movimiento de pilotos, movimiento de la nave y movimeinto y disparo
+de las torretas.
+
+Lo que estaremos haciendo en los futuros 14 dias es:
+1. Desarrollar un criterio de Seleccion de pilotos para el jugador.
+2. Nuevos diseños de la nave.
+3. Combinar lo que desarrollamos con la UI del juego
+4. Agregar los primeros enemigos.
+5. Poner el primer video del juego.
+
+Seguiremos haciendo wireframing de la pagina del juego. Y probablemente cambiaremos
+la pagina home del Blog.
+
+Desde ya saludos.-

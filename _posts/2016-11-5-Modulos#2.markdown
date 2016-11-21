@@ -1,0 +1,75 @@
+---
+layout: post
+title: Modulos#2
+---
+
+Buenas,
+
+Hoy nos enfocaremos en los dos modulos que tendra la Nave.
+Desde el punto de vista de la Jerarquia todos seran hijos de Nave.
+
+`Parte1: Cubierta.`<br>
+`Parte2: Proa.`
+
+Este desarrollo es creado bajo Unity 5.4.1 en c#.
+
+
+<h3>Parte1: Cubierta.</h3>
+
+Tendra la misma Layer que el GameObject Nave, y tendra tres componentes:<br>
+
+<em>Transform</em><br>
+<em>Sprite Renderer</em><br>
+<em>Poligon Collider</em><br>
+
+<h3>Transform:</h3>
+No me interesa que tenga ninguna posicion relativa especial(Respecto al padre)
+Por lo tanto Vector3(0,0,0). Importante la posicion absoluta la manejo desde
+el GameObject Padre.
+
+<h3>SpriteRender:</h3>
+En sprite elijo la imagen de la Nave.
+
+Importante: Dado que mi nave no se mueve lateralmente y solo rota desde un pivot es necesario en mi caso
+definirlo.
+Par poder hacerlo hay que seleccionar la imagen desde la UI de Unity, elegir Sprite Editor<br>
+
+<img width="50%" height="50%" src="/image/pivot.png">
+<br>
+
+El pivot esta marcado con una flecha roja. La ubicacion es arbitraria. Esto hara que en el
+momento de girar lo hara desde ese punto.
+
+<h3>PolygonCollider: </h3>
+Con esta componente definiremos las "paredes" de la nave, la manera mas sencilla de hacerlo
+es con un el boton Edit Collider desde la UI de Unity.<br>
+
+<img width="50%" height="50%" src="/image/collider.png">
+<br>
+
+Las lineas verdes forman el collider. Es importante que la zona donde se mueven lso pilotos
+este libre de esta componente.
+
+
+<h3>Parte2: Proa.</h3>
+
+Tendra la misma Layer que el GameObject Nave, y tendra una componentes:
+
+<em>Transform</em>
+
+Tendra la siguiente posicion relativa:<br>
+
+<img width="50%" height="50%" src="/image/proa.png">
+<br>
+
+Este GameObject lo utilizaremos para generar el vector director con el que la nave se va a
+desplazar. Cuando nuestra Nave rote, nuestro punto tambien lo hará.
+
+A pesar de que en esta entrada no hemos generado código, hemos creados dos GameObject Fundamental
+para nuestro juego.
+El primero los limites reales de los pilotos encerrados en la nave, impidiendo que caminene por
+el espacio y el último el vector director de nuestra nave dado que solo tiene desplazamiento unidireccional.
+
+En la próxima entrada veremos los puntos de anclajes que es otra parte fundamental de nuestra Nave.
+
+Saludos.-
