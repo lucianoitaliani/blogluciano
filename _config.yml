@@ -30,5 +30,7 @@ theme: minima
 gems:
   - jekyll-feed
 exclude:
+  - config.ru
+  - vendor
   - Gemfile
   - Gemfile.lock
